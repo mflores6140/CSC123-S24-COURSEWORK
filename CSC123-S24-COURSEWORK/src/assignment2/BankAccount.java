@@ -32,4 +32,19 @@ public class BankAccount {
 		}
 		return false;
 	}
+	
+	//method for checking if account is open
+	public boolean isOpen() {
+		return isOpen;
+	}
+	
+	//method for closing account
+	public void close() {
+		isOpen = false;
+	}
+	
+	//method for getting account owner's full name
+	public String getOwnerFullName() {
+		return ownerFirstName + " " + ownerLastName;
+	}
 }
