@@ -15,12 +15,10 @@ package labs;
 		ISBN = isbn;
 	}
 	
-	public Book(String author, String isbn, int pages, String publishingCompany, int amazonRank) {
+	public Book(String author, String isbn, int pages) {
 		AuthorName = author;
 		ISBN = isbn;
 		NumberOfPages = pages;
-		PublishingCompany = publishingCompany;
-		AmazonRank = amazonRank;
 	}
 	
 	public String getAuthor() {
@@ -35,28 +33,8 @@ package labs;
 		return NumberOfPages;
 	}
 	
-	public String getISBN() {
-		return ISBN;
-	}
-	
 	public void setAmazonRank(int rankA) {
 		AmazonRank = rankA;
-	}
-	
-	public void setAuthor() {
-		AuthorName = "Jimmy John";
-	}
-	
-	public void setNumberOfPages() {
-		NumberOfPages = 100;
-	}
-	
-	public void setISBN() {
-		ISBN = "ABC";
-	}
-	
-	public void setPublishingCompany() {
-		
 	}
 	
 	public String toString() {
@@ -68,7 +46,7 @@ package labs;
 	}
 	
 	public Book creatCopy() {
-		Book b = new Book(AuthorName, ISBN, NumberOfPages, PublishingCompany, AmazonRank);
+		Book b = new Book(AuthorName, ISBN, NumberOfPages);
 		b.setAmazonRank(AmazonRank);
 		return b;
 	}

@@ -15,5 +15,21 @@ public class BankAccount {
 		this.isOpen = true;
 	}
 	
+	//method to deposit
+	public boolean deposit(double amount) {
+		if(amount > 0 && isOpen) {
+			balance += amount;
+			return true;
+		}
+		return false;
+	}
 	
+	//method to withdraw
+	public boolean withdraw(double amount) {
+		if(amount > 0 && isOpen && balance >= amount) {
+			balance =- amount;
+			return true;
+		}
+		return false;
+	}
 }
