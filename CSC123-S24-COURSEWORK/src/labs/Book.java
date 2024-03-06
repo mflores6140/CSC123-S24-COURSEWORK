@@ -1,4 +1,4 @@
-package labs;
+
 	public class Book{
 		
 	String PublishingCompany = "Pearson";
