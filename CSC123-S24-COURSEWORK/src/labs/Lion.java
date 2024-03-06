@@ -1,4 +1,4 @@
-
+package labs;
 public class Lion extends Animal{
 
 	String furColor;

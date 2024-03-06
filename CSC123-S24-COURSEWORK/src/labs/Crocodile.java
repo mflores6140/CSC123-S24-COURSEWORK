@@ -1,4 +1,4 @@
-
+package labs;
 public class Crocodile extends Animal {
 
 	String scalesType;

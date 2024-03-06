@@ -1,4 +1,4 @@
-
+package labs;
 public class Rhino extends Animal{
 
 	String hideType;
