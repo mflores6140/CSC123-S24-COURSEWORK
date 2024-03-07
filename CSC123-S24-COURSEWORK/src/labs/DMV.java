@@ -1,5 +1,7 @@
 package labs;
 
+import Car;
+
 public class DMV {
     private String address;
     private String timeOpen;
