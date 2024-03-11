@@ -1,22 +1,35 @@
 import java.util.Date;
 
 class DMV {
-    private String state;
     private Registration[] registrations;
     private Citation[] citations;
     private int registrationsCount;
     private int citationsCount;
 
     public DMV(String state) {
-        this.state = state;
         this.registrations = new Registration[100];
         this.citations = new Citation[100];
         this.registrationsCount = 0;
         this.citationsCount = 0;
     }
 
-    public void registerVehicle(Owner[] owners, Vehicle vehicle) {
-        registrations[registrationsCount++] = new Registration(registrationsCount + "", state, vehicle, owners);
+    public void registerVehicle(Owner[] owners, Vehicle vehicle) throws Exception {
+        // Check if there are pending citations for the vehicle
+        for (int i = 0; i < citationsCount; i++) {
+            if (citations[i].getRegistration().getVehicle().equals(vehicle)) {
+                throw new Exception("Vehicle has pending citations. Cannot register.");
+            }
+        }
+        
+        // Check if the vehicle already has an active registration
+        for (int i = 0; i < registrationsCount; i++) {
+            if (registrations[i].getVehicle().equals(vehicle) && registrations[i].isActive()) {
+                throw new Exception("Vehicle already has an active registration.");
+            }
+        }
+
+        // Create a new registration
+        registrations[registrationsCount++] = new Registration(generateUniqueId(), new Date(), null, vehicle.getPlate(), vehicle, owners);
     }
 
     public void registerCitation(Citation citation) {
@@ -37,7 +50,7 @@ class DMV {
 
     public Registration searchRegistrationByPlate(String plate) {
         for (int i = 0; i < registrationsCount; i++) {
-            if (registrations[i].getPlate().equals(plate)) {
+            if (registrations[i].getVehicle().getPlate().equals(plate)) {
                 return registrations[i];
             }
         }
@@ -46,7 +59,7 @@ class DMV {
 
     public Registration searchRegistrationById(String id) {
         for (int i = 0; i < registrationsCount; i++) {
-            if (registrations[i].getId().equals(id)) {
+            if (registrations[i].getUniqueID().equals(id)) {
                 return registrations[i];
             }
         }
@@ -91,5 +104,9 @@ class DMV {
             }
         }
         return null;
+    }
+
+    private String generateUniqueId() {
+        return String.valueOf(System.currentTimeMillis());
     }
 }

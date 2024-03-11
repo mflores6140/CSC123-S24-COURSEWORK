@@ -1,3 +1,4 @@
+package labs;
 
 public class BrakesNotAppliedException extends Exception {
     public BrakesNotAppliedException(String message) {

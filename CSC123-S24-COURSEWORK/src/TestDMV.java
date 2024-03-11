@@ -10,15 +10,15 @@ public class TestDMV {
         while (true) {
             System.out.println("\n1. Register Vehicle");
             System.out.println("2. Register Citation");
-            System.out.println("3. List All Registrations");
-            System.out.println("4. List All Citations");
+            System.out.println("3. List all Registrations");
+            System.out.println("4. List all Citations");
             System.out.println("5. List all Registrations for a vehicle");
             System.out.println("6. List all Registrations for a person");
             System.out.println("7. List all Citations for a vehicle");
             System.out.println("8. List all Citations for a person");
             System.out.println("9. Exit");
 
-            System.out.print("Enter your choice: ");
+            System.out.println("Enter your choice: ");
             int choice = scanner.nextInt();
 
             switch (choice) {
@@ -48,33 +48,39 @@ public class TestDMV {
     }
 
     private static void registerVehicle(DMV dmv, Scanner scanner) {
-        System.out.print("Enter vehicle VIN: ");
+    	System.out.println("Enter vehicle license plate: ");
+        String plate = scanner.next();
+        scanner.nextLine();
+    	System.out.println("Enter vehicle VIN: ");
         String vin = scanner.next();
-        System.out.print("Enter vehicle make: ");
-        String make = scanner.next();
-        System.out.print("Enter vehicle model: ");
-        String model = scanner.next();
-        System.out.print("Enter vehicle color: ");
-        String color = scanner.next();
-        System.out.print("Enter vehicle number of doors: ");
+        scanner.nextLine();
+        System.out.println("Enter vehicle make: ");
+        String make = scanner.nextLine();
+        System.out.println("Enter vehicle model: ");
+        String model = scanner.nextLine();
+        System.out.println("Enter vehicle color: ");
+        String color = scanner.nextLine();
+        System.out.println("Enter vehicle number of doors: ");
         int numberOfDoors = scanner.nextInt();
-        System.out.print("Enter owner unique ID: ");
+        scanner.nextLine();
+        System.out.println("Enter owner unique ID: ");
         int uniqueID = scanner.nextInt();
-        System.out.print("Enter owner first name: ");
-        String firstName = scanner.next();
-        System.out.print("Enter owner last name: ");
-        String lastName = scanner.next();
-        System.out.print("Enter owner address: ");
-        String address = scanner.next();
-        System.out.print("Enter owner city: ");
-        String city = scanner.next();
-        System.out.print("Enter owner state: ");
-        String ownerState = scanner.next();
-        System.out.print("Enter owner zip: ");
-        String zip = scanner.next();
+        scanner.nextLine();
+        System.out.println("Enter owner first name: ");
+        String firstName = scanner.nextLine();
+        System.out.println("Enter owner last name: ");
+        String lastName = scanner.nextLine();
+        System.out.println("Enter owner address: ");
+        String address = scanner.nextLine();
+        System.out.println("Enter owner city: ");
+        String city = scanner.nextLine();
+        System.out.println("Enter owner state: ");
+        String ownerState = scanner.nextLine();
+        System.out.println("Enter owner zip: ");
+        String zip = scanner.nextLine();
 
         Owner owner = new Owner(uniqueID, firstName, lastName, address, city, ownerState, zip);
-        Vehicle vehicle = new Vehicle(vin, new Date(), make, model, color, numberOfDoors);
+        Vehicle vehicle = new Vehicle(vin, new Date(), make, model, color, numberOfDoors, plate);
         Owner[] owners = {owner};
 
         try {
@@ -86,13 +92,13 @@ public class TestDMV {
     }
 
     private static void registerCitation(DMV dmv, Scanner scanner) {
-        System.out.print("Enter vehicle license plate: ");
+        System.out.println("Enter vehicle license plate: ");
         String plate = scanner.next();
-        System.out.print("Enter offence code: ");
+        System.out.println("Enter offence code: ");
         int offenceCode = scanner.nextInt();
-        System.out.print("Enter amount: ");
+        System.out.println("Enter amount: ");
         double amount = scanner.nextDouble();
-        System.out.print("Enter status: ");
+        System.out.println("Enter status: ");
         String status = scanner.next();
 
         Registration registration = dmv.searchRegistrationByPlate(plate);
@@ -106,7 +112,7 @@ public class TestDMV {
     }
 
     private static void listRegistrationsForVehicle(DMV dmv, Scanner scanner) {
-        System.out.print("Enter vehicle license plate: ");
+        System.out.println("Enter vehicle license plate: ");
         String plate = scanner.next();
         Registration registration = dmv.searchRegistrationByPlate(plate);
         if (registration != null) {

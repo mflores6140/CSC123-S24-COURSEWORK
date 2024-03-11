@@ -6,14 +6,16 @@ public class Vehicle {
     private String model;
     private String color;
     private int numberOfDoors;
+    private String plate;
 
-    public Vehicle(String vin, Date dateOfMfg, String make, String model, String color, int numberOfDoors) {
+    public Vehicle(String vin, Date dateOfMfg, String make, String model, String color, int numberOfDoors, String plate) {
         this.vin = vin;
         this.dateOfMfg = dateOfMfg;
         this.make = make;
         this.model = model;
         this.color = color;
         this.numberOfDoors = numberOfDoors;
+        this.setPlate(plate);
     }
 
 	public String getVin() {
@@ -62,6 +64,14 @@ public class Vehicle {
 
 	public void setNumberOfDoors(int numberOfDoors) {
 		this.numberOfDoors = numberOfDoors;
+	}
+
+	public String getPlate() {
+		return plate;
+	}
+
+	public void setPlate(String plate) {
+		this.plate = plate;
 	}
 
 }

@@ -9,7 +9,6 @@ public class Registration {
 	private Owner[] owners;
 	
 	public Registration(String uniqueID, Date startDate, Date endDate, String plate, Vehicle vehicle, Owner[] owners) {
-		super();
 		this.uniqueID = uniqueID;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -17,6 +16,10 @@ public class Registration {
 		this.vehicle = vehicle;
 		this.owners = owners;
 	}
+	
+	public boolean isActive() {
+        return endDate == null || endDate.after(new Date());
+    }
 
 	public String getUniqueID() {
 		return uniqueID;
