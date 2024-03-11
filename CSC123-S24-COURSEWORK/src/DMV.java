@@ -16,7 +16,7 @@ class DMV {
     }
 
     public void registerVehicle(Owner[] owners, Vehicle vehicle) {
-        registrations[registrationsCount++] = new Registration(registrationsCount + "", vehicle, owners);
+        registrations[registrationsCount++] = new Registration(registrationsCount + "", state, vehicle, owners);
     }
 
     public void registerCitation(Citation citation) {
