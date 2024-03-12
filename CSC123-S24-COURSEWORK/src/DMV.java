@@ -37,8 +37,31 @@ class DMV {
     }
 
     public void listRegistrations() {
+        System.out.println("All Registrations:");
         for (int i = 0; i < registrationsCount; i++) {
-            System.out.println(registrations[i]);
+            System.out.println("Registration ID: " + registrations[i].getUniqueID());
+            System.out.println("Start Date: " + registrations[i].getStartDate());
+            System.out.println("End Date: " + registrations[i].getEndDate());
+            System.out.println("Plate: " + registrations[i].getPlate());
+
+            Vehicle vehicle = registrations[i].getVehicle();
+            System.out.println("Vehicle Make: " + vehicle.getMake());
+            System.out.println("Vehicle Model: " + vehicle.getModel());
+            System.out.println("Vehicle Color: " + vehicle.getColor());
+            System.out.println("Vehicle VIN: " + vehicle.getVin());
+            System.out.println("Number of Doors: " + vehicle.getNumberOfDoors());
+
+            Owner[] owners = registrations[i].getOwners();
+            System.out.println("Owners:");
+            for (Owner owner : owners) {
+                System.out.println("Owner ID: " + owner.getUniqueID());
+                System.out.println("Owner Name: " + owner.getFirstName() + " " + owner.getLastName());
+                System.out.println("Owner Address: " + owner.getAddress());
+                System.out.println("Owner City: " + owner.getCity());
+                System.out.println("Owner State: " + owner.getState());
+                System.out.println("Owner Zip: " + owner.getZip());
+            }
+            System.out.println("------------------------");
         }
     }
 
@@ -57,9 +80,9 @@ class DMV {
         return null;
     }
 
-    public Registration searchRegistrationById(String id) {
+    public Registration searchRegistrationById(long id) {
         for (int i = 0; i < registrationsCount; i++) {
-            if (registrations[i].getUniqueID().equals(id)) {
+            if (registrations[i].getUniqueID() == id) {
                 return registrations[i];
             }
         }
@@ -106,7 +129,7 @@ class DMV {
         return null;
     }
 
-    private String generateUniqueId() {
-        return String.valueOf(System.currentTimeMillis());
+    private long generateUniqueId() {
+        return Long.valueOf(System.currentTimeMillis());
     }
 }

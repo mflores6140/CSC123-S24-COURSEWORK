@@ -1,14 +1,14 @@
 import java.util.Date;
 public class Registration {
 
-	private String uniqueID;
+	private long uniqueID;
 	private Date startDate;
 	private Date endDate;
 	private String plate;
 	private Vehicle vehicle;
 	private Owner[] owners;
 	
-	public Registration(String uniqueID, Date startDate, Date endDate, String plate, Vehicle vehicle, Owner[] owners) {
+	public Registration(long uniqueID, Date startDate, Date endDate, String plate, Vehicle vehicle, Owner[] owners) {
 		this.uniqueID = uniqueID;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -18,14 +18,15 @@ public class Registration {
 	}
 	
 	public boolean isActive() {
-        return endDate == null || endDate.after(new Date());
+		Date currentDate = new Date(); // Current date
+        return (currentDate.after(startDate) && currentDate.before(endDate));
     }
 
-	public String getUniqueID() {
+	public long getUniqueID() {
 		return uniqueID;
 	}
 
-	public void setUniqueID(String uniqueID) {
+	public void setUniqueID(long uniqueID) {
 		this.uniqueID = uniqueID;
 	}
 
