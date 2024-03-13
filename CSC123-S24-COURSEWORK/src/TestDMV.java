@@ -112,7 +112,7 @@ public class TestDMV {
 
         Registration registration = dmv.searchRegistrationByPlate(plate);
         if (registration != null) {
-            Citation citation = new Citation(1, new Date(), offenceCode, amount, status, registration);
+            Citation citation = new Citation(1, new Date(), null, offenceCode, amount, status, registration);
             dmv.registerCitation(citation);
             System.out.println("Citation registered successfully!");
         } else {
@@ -153,51 +153,82 @@ public class TestDMV {
             System.out.println("Vehicle not found.");
         }
     }
-        private static void listRegistrationsForPerson(DMV dmv, Scanner scanner) {
-            // list all registrations for a person
-            System.out.println("Enter owner unique ID: ");
-            int uniqueID = scanner.nextInt();
-            Owner owner = new Owner(uniqueID, "", "", "", "", "", "");
-            Registration registration = dmv.searchRegistrationByOwner(owner);
-            if (registration != null) {
-                System.out.println("Registrations for the person:");
-                System.out.println(registration);
-            } else {
-                System.out.println("Registrations not found for the person.");
-            }
-        }
+    private static void listRegistrationsForPerson(DMV dmv, Scanner scanner) {
+        System.out.println("Enter owner unique ID: ");
+        int uniqueID = scanner.nextInt();
+        Owner owner = new Owner(uniqueID, "", "", "", "", "", ""); // Only set uniqueID
+        Registration registration = dmv.searchRegistrationByOwner(owner);
+        if (registration != null) {
+            System.out.println("Registrations for the person:");
+            System.out.println("Registration ID: " + registration.getUniqueID());
+            System.out.println("Start Date: " + registration.getStartDate());
+            System.out.println("End Date: " + registration.getEndDate());
+            System.out.println("Plate: " + registration.getPlate());
 
-        private static void listCitationsForVehicle(DMV dmv, Scanner scanner) {
-            // list all citations for a vehicle
-            System.out.println("Enter vehicle license plate: ");
-            String plate = scanner.next();
-            Registration registration = dmv.searchRegistrationByPlate(plate);
-            if (registration != null) {
-                Citation citation = dmv.searchCitationByRegistration(registration);
-                if (citation != null) {
-                    System.out.println("Citations for the vehicle:");
-                    System.out.println(citation);
-                } else {
-                    System.out.println("No citations found for the vehicle.");
+            Vehicle vehicle = registration.getVehicle();
+            System.out.println("Vehicle Make: " + vehicle.getMake());
+            System.out.println("Vehicle Model: " + vehicle.getModel());
+            System.out.println("Vehicle Color: " + vehicle.getColor());
+            System.out.println("Vehicle VIN: " + vehicle.getVin());
+            System.out.println("Number of Doors: " + vehicle.getNumberOfDoors());
+
+            Owner[] owners = registration.getOwners();
+            System.out.println("Owners:");
+            for (Owner o : owners) {
+                System.out.println("Owner ID: " + o.getUniqueID());
+                System.out.println("Owner Name: " + o.getFirstName() + " " + o.getLastName());
+                System.out.println("Owner Address: " + o.getAddress());
+                System.out.println("Owner City: " + o.getCity());
+                System.out.println("Owner State: " + o.getState());
+                System.out.println("Owner Zip: " + o.getZip());
+            }
+        } else {
+            System.out.println("Registrations not found for the person.");
+        }
+    }
+
+    private static void listCitationsForVehicle(DMV dmv, Scanner scanner) {
+        System.out.println("Enter vehicle license plate: ");
+        String plate = scanner.next();
+        Registration registration = dmv.searchRegistrationByPlate(plate);
+        if (registration != null) {
+            System.out.println("Citations for the vehicle:");
+            boolean found = false;
+            for (Citation citation : dmv.getCitations()) {
+                if (citation != null && citation.getRegistration().equals(registration)) {
+                    System.out.println("Citation ID: " + citation.getId());
+                    System.out.println("Date: " + citation.getDate());
+                    System.out.println("Offence Code: " + citation.getOffenceCode());
+                    System.out.println("Amount: " + citation.getAmount());
+                    System.out.println("Status: " + citation.getStatus());
+                    found = true;
                 }
-            } else {
-                System.out.println("Vehicle not found.");
+            }
+            if (!found) {
+                System.out.println("No citations found for the vehicle.");
+            }
+        } else {
+            System.out.println("Vehicle not found.");
+        }
+    }
+
+    private static void listCitationsForPerson(DMV dmv, Scanner scanner) {
+        System.out.println("Enter owner unique ID: ");
+        int uniqueID = scanner.nextInt();
+        System.out.println("Citations for the person:");
+        boolean found = false;
+        for (Citation citation : dmv.getCitations()) {
+            if (citation != null && citation.getRegistration().getOwners()[0].getUniqueID() == uniqueID) {
+                System.out.println("Citation ID: " + citation.getId()); // Retrieve citation ID from the Citation object
+                System.out.println("Date: " + citation.getDate());
+                System.out.println("Offence Code: " + citation.getOffenceCode());
+                System.out.println("Amount: " + citation.getAmount());
+                System.out.println("Status: " + citation.getStatus());
+                found = true;
             }
         }
-
-        private static void listCitationsForPerson(DMV dmv, Scanner scanner) {
-            // list all citations for a person
-            System.out.println("Enter owner unique ID: ");
-            int uniqueID = scanner.nextInt();
-            Owner owner = new Owner(uniqueID, "", "", "", "", "", "");
-            Citation citation = dmv.searchCitationByOwner(owner);
-            if (citation != null) {
-                System.out.println("Citations for the person:");
-                System.out.println(citation);
-            } else {
-                System.out.println("Citations not found for the person.");
-            }
-        
-        
+        if (!found) {
+            System.out.println("No citations found for the person.");
+        }
     }
 }
