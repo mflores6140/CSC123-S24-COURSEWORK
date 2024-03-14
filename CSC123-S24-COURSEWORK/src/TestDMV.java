@@ -57,12 +57,19 @@ public class TestDMV {
     }
 
     private static void registerVehicle(DMV dmv, Scanner scanner) {
+    	scanner.nextLine();
     	System.out.println("Enter vehicle license plate: ");
-        String plate = scanner.next();
-        scanner.nextLine();
+        String plate = scanner.nextLine();
+        if (!plate.matches("[A-Za-z0-9]+")) {
+            System.out.println("Invalid plate format. Plate should contain only alphanumeric characters.");
+            return;
+        }
     	System.out.println("Enter vehicle VIN: ");
-        String vin = scanner.next();
-        scanner.nextLine();
+        String vin = scanner.nextLine();
+        if (!vin.matches("[A-HJ-NPR-Z0-9]{17}")) {
+            System.out.println("Invalid VIN format.");
+            return;
+        }
         System.out.println("Enter vehicle make: ");
         String make = scanner.nextLine();
         System.out.println("Enter vehicle model: ");
@@ -70,11 +77,22 @@ public class TestDMV {
         System.out.println("Enter vehicle color: ");
         String color = scanner.nextLine();
         System.out.println("Enter vehicle number of doors: ");
-        int numberOfDoors = scanner.nextInt();
+        int numberOfDoors;
+        if (scanner.hasNextInt()) {
+            numberOfDoors = scanner.nextInt();
+        } else {
+            System.out.println("Invalid input for number of doors.");
+            return;
+        }
         scanner.nextLine();
         System.out.println("Enter owner unique ID: ");
-        int uniqueID = scanner.nextInt();
-        scanner.nextLine();
+        int uniqueID;
+        if (scanner.hasNextInt()) {
+            uniqueID = scanner.nextInt();
+        } else {
+            System.out.println("Invalid input for owner unique ID.");
+            return;
+        }
         System.out.println("Enter owner first name: ");
         String firstName = scanner.nextLine();
         System.out.println("Enter owner last name: ");
@@ -101,14 +119,28 @@ public class TestDMV {
     }
 
     private static void registerCitation(DMV dmv, Scanner scanner) {
-        System.out.println("Enter vehicle license plate: ");
+    	scanner.nextLine();
+    	System.out.println("Enter vehicle license plate: ");
         String plate = scanner.next();
         System.out.println("Enter offence code: ");
-        int offenceCode = scanner.nextInt();
+        int offenceCode;
+        if (scanner.hasNextInt()) {
+            offenceCode = scanner.nextInt();
+        } else {
+            System.out.println("Invalid input for offence code.");
+            return;
+        }
         System.out.println("Enter amount: ");
-        double amount = scanner.nextDouble();
+        double amount;
+        if (scanner.hasNextDouble()) {
+            amount = scanner.nextDouble();
+        } else {
+            System.out.println("Invalid input for amount.");
+            return;
+        }
+        scanner.nextLine();
         System.out.println("Enter status: ");
-        String status = scanner.next();
+        String status = scanner.nextLine();
 
         Registration registration = dmv.searchRegistrationByPlate(plate);
         if (registration != null) {

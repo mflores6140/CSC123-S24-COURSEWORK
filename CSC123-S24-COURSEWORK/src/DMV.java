@@ -76,6 +76,10 @@ public class DMV {
     }
 
     public void listCitations() {
+    	if (citations.isEmpty()) {
+            System.out.println("No citations found.");
+            return;
+        }
         System.out.println("All Citations:");
         for (Citation citation : citations) {
             System.out.println("Citation ID: " + citation.getId());
@@ -146,11 +150,11 @@ public class DMV {
     }
 
     private long generateUniqueId() {
-        return Long.valueOf(System.currentTimeMillis());
+        return System.currentTimeMillis();
     }
-    
+
     public int getCitationsCount() {
-        return getCitationsCount();
+        return citations.size();
     }
     
     public ArrayList<Citation> getCitations() {
