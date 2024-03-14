@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Date;
 public class Registration {
 
@@ -6,9 +7,9 @@ public class Registration {
 	private Date endDate;
 	private String plate;
 	private Vehicle vehicle;
-	private Owner[] owners;
+	private ArrayList<Owner> owners;
 	
-	public Registration(long uniqueID, Date startDate, Date endDate, String plate, Vehicle vehicle, Owner[] owners) {
+	public Registration(long uniqueID, Date startDate, Date endDate, String plate, Vehicle vehicle, ArrayList<Owner> owners) {
 		this.uniqueID = uniqueID;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -62,11 +63,11 @@ public class Registration {
 		this.vehicle = vehicle;
 	}
 
-	public Owner[] getOwners() {
+	public ArrayList<Owner> getOwners() {
 		return owners;
 	}
 
-	public void setOwners(Owner[] owners) {
+	public void setOwners(ArrayList<Owner> owners) {
 		this.owners = owners;
 	}
 	

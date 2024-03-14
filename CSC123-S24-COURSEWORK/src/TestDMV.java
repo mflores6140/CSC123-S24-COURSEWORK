@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -57,15 +59,16 @@ public class TestDMV {
     }
 
     private static void registerVehicle(DMV dmv, Scanner scanner) {
-    	scanner.nextLine();
-    	System.out.println("Enter vehicle license plate: ");
+        scanner.nextLine();
+        System.out.println("Enter vehicle license plate: ");
         String plate = scanner.nextLine();
         if (!plate.matches("[A-Za-z0-9]+")) {
             System.out.println("Invalid plate format. Plate should contain only alphanumeric characters.");
             return;
         }
-    	System.out.println("Enter vehicle VIN: ");
+        System.out.println("Enter vehicle VIN: ");
         String vin = scanner.nextLine();
+        //Vin can only use digits 0-9 and Uppercase letters A-H, J-N, P, R-Z, 17 characters long, cannot use I, O, or Q to avoid confusion
         if (!vin.matches("[A-HJ-NPR-Z0-9]{17}")) {
             System.out.println("Invalid VIN format.");
             return;
@@ -85,30 +88,31 @@ public class TestDMV {
             return;
         }
         scanner.nextLine();
-        System.out.println("Enter owner unique ID: ");
-        int uniqueID;
-        if (scanner.hasNextInt()) {
-            uniqueID = scanner.nextInt();
-        } else {
-            System.out.println("Invalid input for owner unique ID.");
-            return;
-        }
-        System.out.println("Enter owner first name: ");
-        String firstName = scanner.nextLine();
-        System.out.println("Enter owner last name: ");
-        String lastName = scanner.nextLine();
-        System.out.println("Enter owner address: ");
-        String address = scanner.nextLine();
-        System.out.println("Enter owner city: ");
-        String city = scanner.nextLine();
-        System.out.println("Enter owner state: ");
-        String ownerState = scanner.nextLine();
-        System.out.println("Enter owner zip: ");
-        String zip = scanner.nextLine();
+        System.out.println("Enter the number of owners: ");
+        int numOwners = scanner.nextInt();
+        scanner.nextLine();
+        ArrayList<Owner> owners = new ArrayList<>();
+        for (int i = 0; i < numOwners; i++) {
+            System.out.println("Enter owner unique ID for owner " + (i + 1) + ": ");
+            int uniqueID = scanner.nextInt();
+            scanner.nextLine(); // Consume newline character
+            System.out.println("Enter owner first name for owner " + (i + 1) + ": ");
+            String firstName = scanner.nextLine();
+            System.out.println("Enter owner last name for owner " + (i + 1) + ": ");
+            String lastName = scanner.nextLine();
+            System.out.println("Enter owner address for owner " + (i + 1) + ": ");
+            String address = scanner.nextLine();
+            System.out.println("Enter owner city for owner " + (i + 1) + ": ");
+            String city = scanner.nextLine();
+            System.out.println("Enter owner state for owner " + (i + 1) + ": ");
+            String ownerState = scanner.nextLine();
+            System.out.println("Enter owner zip for owner " + (i + 1) + ": ");
+            String zip = scanner.nextLine();
 
-        Owner owner = new Owner(uniqueID, firstName, lastName, address, city, ownerState, zip);
+            owners.add(new Owner(uniqueID, firstName, lastName, address, city, ownerState, zip));
+        }
+
         Vehicle vehicle = new Vehicle(vin, new Date(), make, model, color, numberOfDoors, plate);
-        Owner[] owners = {owner};
 
         try {
             dmv.registerVehicle(owners, vehicle);
@@ -144,7 +148,12 @@ public class TestDMV {
 
         Registration registration = dmv.searchRegistrationByPlate(plate);
         if (registration != null) {
-            Citation citation = new Citation(1, new Date(), null, offenceCode, amount, status, registration);
+        	Date citationDate = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(citationDate);
+            calendar.add(Calendar.DAY_OF_MONTH, 30); // Adding 30 days
+            Date dueDate = calendar.getTime();
+            Citation citation = new Citation(1, citationDate, dueDate, offenceCode, amount, status, registration);
             dmv.registerCitation(citation);
             System.out.println("Citation registered successfully!");
         } else {
@@ -171,7 +180,7 @@ public class TestDMV {
             System.out.println("Vehicle VIN: " + vehicle.getVin());
             System.out.println("Number of Doors: " + vehicle.getNumberOfDoors());
 
-            Owner[] owners = registration.getOwners();
+            ArrayList<Owner> owners = registration.getOwners();
             System.out.println("Owners:");
             for (Owner owner : owners) {
                 System.out.println("Owner ID: " + owner.getUniqueID());
@@ -204,7 +213,7 @@ public class TestDMV {
             System.out.println("Vehicle VIN: " + vehicle.getVin());
             System.out.println("Number of Doors: " + vehicle.getNumberOfDoors());
 
-            Owner[] owners = registration.getOwners();
+            ArrayList<Owner> owners = registration.getOwners();
             System.out.println("Owners:");
             for (Owner o : owners) {
                 System.out.println("Owner ID: " + o.getUniqueID());
@@ -241,7 +250,7 @@ public class TestDMV {
             }
         } else {
             System.out.println("Vehicle not found.");
-        }
+       }
     }
 
     private static void listCitationsForPerson(DMV dmv, Scanner scanner) {
@@ -250,13 +259,20 @@ public class TestDMV {
         System.out.println("Citations for the person:");
         boolean found = false;
         for (Citation citation : dmv.getCitations()) {
-            if (citation != null && citation.getRegistration().getOwners()[0].getUniqueID() == uniqueID) {
-                System.out.println("Citation ID: " + citation.getId()); // Retrieve citation ID from the Citation object
-                System.out.println("Date: " + citation.getDate());
-                System.out.println("Offence Code: " + citation.getOffenceCode());
-                System.out.println("Amount: " + citation.getAmount());
-                System.out.println("Status: " + citation.getStatus());
-                found = true;
+            Registration registration = citation.getRegistration();
+            if (registration != null) {
+                ArrayList<Owner> owners = registration.getOwners();
+                for (Owner owner : owners) {
+                    if (owner.getUniqueID() == uniqueID) {
+                        System.out.println("Citation ID: " + citation.getId());
+                        System.out.println("Date: " + citation.getDate());
+                        System.out.println("Offence Code: " + citation.getOffenceCode());
+                        System.out.println("Amount: " + citation.getAmount());
+                        System.out.println("Status: " + citation.getStatus());
+                        found = true;
+                        break; 
+                    }
+                }
             }
         }
         if (!found) {

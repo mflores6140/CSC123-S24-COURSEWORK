@@ -74,4 +74,3 @@ public class Owner {
 		this.zip = zip;
 	}
 }
-

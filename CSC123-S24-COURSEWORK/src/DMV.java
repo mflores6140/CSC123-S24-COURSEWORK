@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DMV {
@@ -11,23 +12,45 @@ public class DMV {
         this.citations = new ArrayList<>();
     }
 
-    public void registerVehicle(Owner[] owners, Vehicle vehicle) throws Exception {
+    public void registerVehicle(ArrayList<Owner> owners, Vehicle vehicle) throws Exception {
+        // Check if the vehicle is already registered
+        if (isVehicleRegistered(vehicle)) {
+            throw new Exception("Vehicle is already registered.");
+        }
+
         // Check if there are pending citations for the vehicle
-        for (Citation citation : citations) {
-            if (citation.getRegistration().getVehicle().equals(vehicle)) {
-                throw new Exception("Vehicle has pending citations. Cannot register.");
-            }
+        if (hasPendingCitations(vehicle)) {
+            throw new Exception("Vehicle has pending citations. Cannot register.");
         }
 
-        // Check if the vehicle already has an active registration
+        // Calculate expiration date (6 months from the registration date)
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, 6); // Adding 6 months until expiration
+        Date expirationDate = calendar.getTime();
+
+        // Create a new registration with the calculated expiration date
+        registrations.add(new Registration(generateUniqueId(), new Date(), expirationDate, vehicle.getPlate(), vehicle, owners));
+    }
+
+    // Helper method to check if the vehicle is already registered
+    private boolean isVehicleRegistered(Vehicle vehicle) {
         for (Registration registration : registrations) {
-            if (registration.getVehicle().equals(vehicle) && registration.isActive()) {
-                throw new Exception("Vehicle already has an active registration.");
+            if (registration.getVehicle().getPlate().equals(vehicle.getPlate())) {
+                return true;
             }
         }
+        return false;
+    }
 
-        // Create a new registration
-        registrations.add(new Registration(generateUniqueId(), new Date(), null, vehicle.getPlate(), vehicle, owners));
+    // Helper method to check if the vehicle has pending citations
+    private boolean hasPendingCitations(Vehicle vehicle) {
+        for (Citation citation : citations) {
+            if (citation.getRegistration().getVehicle().getPlate().equals(vehicle.getPlate())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void registerCitation(Citation citation) {
@@ -61,7 +84,7 @@ public class DMV {
             System.out.println("Vehicle VIN: " + vehicle.getVin());
             System.out.println("Number of Doors: " + vehicle.getNumberOfDoors());
 
-            Owner[] owners = registration.getOwners();
+            ArrayList<Owner> owners = registration.getOwners();
             System.out.println("Owners:");
             for (Owner owner : owners) {
                 System.out.println("Owner ID: " + owner.getUniqueID());
@@ -111,7 +134,7 @@ public class DMV {
 
     public Registration searchRegistrationByOwner(Owner owner) {
         for (Registration registration : registrations) {
-            Owner[] owners = registration.getOwners();
+            ArrayList<Owner> owners = registration.getOwners();
             for (Owner o : owners) {
                 if (o.getUniqueID() == owner.getUniqueID()) { // Compare unique IDs
                     return registration;

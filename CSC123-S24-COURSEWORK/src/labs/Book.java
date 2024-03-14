@@ -1,56 +1,26 @@
+package labs;
 
-	public class Book{
+public class Book {
+	
+	String title;
+	String author;
+	int numberOfPages;
+	String isbn;
+
+	public Book(String title, String author, int numberOfPages, String isbn) {
 		
-	String PublishingCompany = "Pearson";
-	String ISBN;
-	int NumberOfPages = 0;
-	String AuthorName;
-	int AmazonRank = 0;
-	
-	
-	//Constructor
-	
-	public Book(String author, String isbn) {
-		AuthorName = author;
-		ISBN = isbn;
-	}
-	
-	public Book(String author, String isbn, int pages) {
-		AuthorName = author;
-		ISBN = isbn;
-		NumberOfPages = pages;
-	}
-	
-	public String getAuthor() {
-		return AuthorName;
-	}
-
-	public int getAmazonRank() {
-		return AmazonRank;
-	}
-	
-	public int getNumberOfPages() {
-		return NumberOfPages;
-	}
-	
-	public void setAmazonRank(int rankA) {
-		AmazonRank = rankA;
+		this.title=title;
+		this.author=author;
+		this.numberOfPages=numberOfPages;
+		this.isbn=isbn;
 	}
 	
 	public String toString() {
-		return "Author: " + AuthorName + " ISBN: " + " Number of pages: " + NumberOfPages + " Amazon Rank: " + AmazonRank;
+		
+		return "Book named " + title + " , by " + author + " , number of pages: " + numberOfPages + " , isbn: " + isbn;
 	}
 	
 	public boolean equals(Book b) {
-		return getAuthor().equals(b.getAuthor()) && AmazonRank==b.getAmazonRank() && NumberOfPages==b.getNumberOfPages();
+		return numberOfPages == b.numberOfPages && isbn.equals(b.isbn) && title.equals(b.title) && author.equals(b.author);
 	}
-	
-	public Book creatCopy() {
-		Book b = new Book(AuthorName, ISBN, NumberOfPages);
-		b.setAmazonRank(AmazonRank);
-		return b;
-	}
-
-	
-	
 }
