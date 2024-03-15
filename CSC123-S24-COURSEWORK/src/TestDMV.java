@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class TestDMV {
@@ -79,35 +80,19 @@ public class TestDMV {
         String model = scanner.nextLine();
         System.out.println("Enter vehicle color: ");
         String color = scanner.nextLine();
-        System.out.println("Enter vehicle number of doors: ");
-        int numberOfDoors;
-        if (scanner.hasNextInt()) {
-            numberOfDoors = scanner.nextInt();
-        } else {
-            System.out.println("Invalid input for number of doors.");
-            return;
-        }
-        scanner.nextLine();
-        System.out.println("Enter the number of owners: ");
-        int numOwners = scanner.nextInt();
+        int numberOfDoors = enterInt(scanner, "Enter number of doors: ");
+        int numOwners = enterInt(scanner, "Enter the number of owners: ");
         scanner.nextLine();
         ArrayList<Owner> owners = new ArrayList<>();
         for (int i = 0; i < numOwners; i++) {
-            System.out.println("Enter owner unique ID for owner " + (i + 1) + ": ");
-            int uniqueID = scanner.nextInt();
-            scanner.nextLine(); // Consume newline character
-            System.out.println("Enter owner first name for owner " + (i + 1) + ": ");
-            String firstName = scanner.nextLine();
-            System.out.println("Enter owner last name for owner " + (i + 1) + ": ");
-            String lastName = scanner.nextLine();
-            System.out.println("Enter owner address for owner " + (i + 1) + ": ");
-            String address = scanner.nextLine();
-            System.out.println("Enter owner city for owner " + (i + 1) + ": ");
-            String city = scanner.nextLine();
-            System.out.println("Enter owner state for owner " + (i + 1) + ": ");
-            String ownerState = scanner.nextLine();
-            System.out.println("Enter owner zip for owner " + (i + 1) + ": ");
-            String zip = scanner.nextLine();
+            int uniqueID = enterInt(scanner, "Enter owner unique ID for owner " + (i + 1) + ": ");
+            scanner.nextLine(); 
+            String firstName = enterString(scanner, "Enter owner first name for owner " + (i + 1) + ": ");
+            String lastName = enterString(scanner, "Enter owner last name for owner " + (i + 1) + ": ");
+            String address = enterString(scanner, "Enter owner address for owner " + (i + 1) + ": ");
+            String city = enterString(scanner, "Enter owner city for owner " + (i + 1) + ": ");
+            String ownerState = enterString(scanner, "Enter owner state for owner " + (i + 1) + ": ");
+            String zip = enterString(scanner, "Enter owner zip for owner " + (i + 1) + ": ");
 
             owners.add(new Owner(uniqueID, firstName, lastName, address, city, ownerState, zip));
         }
@@ -121,30 +106,51 @@ public class TestDMV {
             System.out.println("Error registering vehicle: " + e.getMessage());
         }
     }
+    
+ // Helper method to handle integer input
+    private static int enterInt(Scanner scanner, String prompt) {
+        int value;
+        while (true) {
+            try {
+                System.out.println(prompt);
+                value = scanner.nextInt();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next();
+            }
+        }
+        return value;
+    }
+    
+    private static double enterDouble(Scanner scanner, String prompt) {
+        double value;
+        while (true) {
+            try {
+                System.out.println(prompt);
+                value = scanner.nextDouble();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.next();
+            }
+        }
+        return value;
+    }
+
+    // Helper method to handle string input
+    private static String enterString(Scanner scanner, String prompt) {
+        System.out.println(prompt);
+        return scanner.nextLine();
+    }
 
     private static void registerCitation(DMV dmv, Scanner scanner) {
     	scanner.nextLine();
     	System.out.println("Enter vehicle license plate: ");
         String plate = scanner.next();
-        System.out.println("Enter offence code: ");
-        int offenceCode;
-        if (scanner.hasNextInt()) {
-            offenceCode = scanner.nextInt();
-        } else {
-            System.out.println("Invalid input for offence code.");
-            return;
-        }
-        System.out.println("Enter amount: ");
-        double amount;
-        if (scanner.hasNextDouble()) {
-            amount = scanner.nextDouble();
-        } else {
-            System.out.println("Invalid input for amount.");
-            return;
-        }
-        scanner.nextLine();
-        System.out.println("Enter status: ");
-        String status = scanner.nextLine();
+        int offenceCode = enterInt(scanner, "Enter offence code: ");
+        double amount = enterDouble(scanner, "Enter amount: ");
+        String status = enterString(scanner, "Enter status: ");
 
         Registration registration = dmv.searchRegistrationByPlate(plate);
         if (registration != null) {
