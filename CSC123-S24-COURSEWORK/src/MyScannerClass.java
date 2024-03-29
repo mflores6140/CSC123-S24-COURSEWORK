@@ -1,8 +1,11 @@
+import java.io.*;
+
 /**
  * MyScannerClass is a scanner class used for parsing primitive types and strings.
  */
-public class MyScannerClass {
+	public class MyScannerClass {
 	private String source;
+	private BufferedReader reader;
     private int position;
     private char delimiter;
 	
@@ -17,6 +20,31 @@ public class MyScannerClass {
         this.delimiter = ' ';
     }
     
+
+    /**
+     * Constructs a new MyScannerClass instance that produces values scanned from the specified InputStream.
+     *
+     * @param inputStream the input stream to scan
+     */
+    public MyScannerClass(InputStream inputStream) {
+        this.reader = new BufferedReader(new InputStreamReader(inputStream));
+        this.position = 0;
+        this.delimiter = ' ';
+    }
+
+    /**
+     * Constructs a new MyScannerClass instance that produces values scanned from the specified File.
+     *
+     * @param file the file to scan
+     * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file,
+     * or for some other reason cannot be opened for reading
+     */
+    public MyScannerClass(File file) throws FileNotFoundException {
+        this.reader = new BufferedReader(new FileReader(file));
+        this.position = 0;
+        this.delimiter = ' ';
+    }
+    
     /**
      * This sets the delimiter, which is a separating character used to tokenize the input string.
      *
@@ -27,12 +55,23 @@ public class MyScannerClass {
     }
     
     /**
-     * hasNext() checks if there's more input available then it returns true.
+     * hasNext() true if there is another token in the input of this scanner.
      *
-     * @return true if more input is available, otherwise returns false
+     * @return true if the scanner has another token, if not it will return false
+     * @throws IOException if an I/O error occurs
      */
     public boolean hasNext() {
-        return position < source.length();
+    	if (reader != null) {
+            try {
+                return reader.ready();
+            } catch (IOException e) {
+                // Handle the IOException here, either by logging it or throwing a custom runtime exception
+                e.printStackTrace();
+                throw new RuntimeException("Error reading input", e);
+            }
+        } else {
+            return position < source.length();
+        }
     }
     
     /**
@@ -353,60 +392,64 @@ public class MyScannerClass {
     /**
      * Main method is used for testing MyScannerClass.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
         // Example input
-        String input = "Hello 987 4.19 true";
+        String input = "Hello 654 6.20 true";
         MyScannerClass scanner = new MyScannerClass(input);
-
-        // Testing reading different types of values
-        System.out.println(scanner.next()); // Output: Hello
-        System.out.println(scanner.nextInt()); // Output: 987
-        System.out.println(scanner.nextDouble()); // Output: 4.19
-        System.out.println(scanner.nextBoolean()); // Output: true
+        try {
+        	// Testing reading different types of values
+        	System.out.println(scanner.next()); // Output: Hello
+        	System.out.println(scanner.nextInt()); // Output: 987
+        	System.out.println(scanner.nextDouble()); // Output: 4.19
+        	System.out.println(scanner.nextBoolean()); // Output: true
         
-        // Test reading a long
-        String longInput = "1234567890123456789";
-        MyScannerClass longScanner = new MyScannerClass(longInput);
-        System.out.println(longScanner.nextLong()); // Output: 1234567890123456789
+        	// Test reading a long
+        	String longInput = "1234567890123456789";
+        	MyScannerClass longScanner = new MyScannerClass(longInput);
+        	System.out.println(longScanner.nextLong()); // Output: 1234567890123456789
 
-        // Test reading a negative integer
-        String negativeIntInput = "-567";
-        MyScannerClass negativeIntScanner = new MyScannerClass(negativeIntInput);
-        System.out.println(negativeIntScanner.nextInt()); // Output: -987
+        	// Test reading a negative integer
+        	String negativeIntInput = "-567";
+        	MyScannerClass negativeIntScanner = new MyScannerClass(negativeIntInput);
+        	System.out.println(negativeIntScanner.nextInt()); // Output: -987
 
-        // Test reading a negative double
-        String negativeDoubleInput = "-6.79";
-        MyScannerClass negativeDoubleScanner = new MyScannerClass(negativeDoubleInput);
-        System.out.println(negativeDoubleScanner.nextDouble()); // Output: -3.14
+        	// Test reading a negative double
+        	String negativeDoubleInput = "-6.79";
+        	MyScannerClass negativeDoubleScanner = new MyScannerClass(negativeDoubleInput);
+        	System.out.println(negativeDoubleScanner.nextDouble()); // Output: -3.14
 
-        // Test reading a boolean in uppercase
-        String uppercaseBooleanInput = "TRUE";
-        MyScannerClass uppercaseBooleanScanner = new MyScannerClass(uppercaseBooleanInput);
-        System.out.println(uppercaseBooleanScanner.nextBoolean()); // Output: true
+        	// Test reading a boolean in uppercase
+        	String uppercaseBooleanInput = "TRUE";
+        	MyScannerClass uppercaseBooleanScanner = new MyScannerClass(uppercaseBooleanInput);
+        	System.out.println(uppercaseBooleanScanner.nextBoolean()); // Output: true
 
-        // Test reading a boolean in mixed case
-        String mixedCaseBooleanInput = "TrUe";
-        MyScannerClass mixedCaseBooleanScanner = new MyScannerClass(mixedCaseBooleanInput);
-        System.out.println(mixedCaseBooleanScanner.nextBoolean()); // Output: true
+        	// Test reading a boolean in mixed case
+        	String mixedCaseBooleanInput = "TrUe";
+        	MyScannerClass mixedCaseBooleanScanner = new MyScannerClass(mixedCaseBooleanInput);
+        	System.out.println(mixedCaseBooleanScanner.nextBoolean()); // Output: true
 
-        // Test reading a boolean in integer format
-        String intBooleanInput = "1";
-        MyScannerClass intBooleanScanner = new MyScannerClass(intBooleanInput);
-        System.out.println(intBooleanScanner.nextBoolean()); // Output: true
+        	// Test reading a boolean in integer format
+        	String intBooleanInput = "1";
+        	MyScannerClass intBooleanScanner = new MyScannerClass(intBooleanInput);
+        	System.out.println(intBooleanScanner.nextBoolean()); // Output: true
 
-        // Test reading a boolean in float format
-        String floatBooleanInput = "1.0";
-        MyScannerClass floatBooleanScanner = new MyScannerClass(floatBooleanInput);
-        System.out.println(floatBooleanScanner.nextBoolean()); // Output: true
+        	// Test reading a boolean in float format
+        	String floatBooleanInput = "1.0";
+        	MyScannerClass floatBooleanScanner = new MyScannerClass(floatBooleanInput);
+        	System.out.println(floatBooleanScanner.nextBoolean()); // Output: true
 
-        // Test reading a boolean in string format
-        String stringBooleanInput = "truE";
-        MyScannerClass stringBooleanScanner = new MyScannerClass(stringBooleanInput);
-        System.out.println(stringBooleanScanner.nextBoolean()); // Throws: MyInputMismatchException
+        	// Test reading a boolean in string format
+        	String stringBooleanInput = "truE";
+        	MyScannerClass stringBooleanScanner = new MyScannerClass(stringBooleanInput);
+        	System.out.println(stringBooleanScanner.nextBoolean()); // Throws: MyInputMismatchException
 
-        // Test reading an empty string
-        String emptyInput = "";
-        MyScannerClass emptyScanner = new MyScannerClass(emptyInput);
-        System.out.println(emptyScanner.hasNext()); // Output: false
-    }
+        	// Test reading an empty string
+        	String emptyInput = "";
+        	MyScannerClass emptyScanner = new MyScannerClass(emptyInput);
+        	System.out.println(emptyScanner.hasNext()); // Output: false
+    	} catch (MyNoSuchElementException | MyInputMismatchException e) {
+        e.printStackTrace();
+    	}
+    
+  }
 }
