@@ -1,0 +1,3 @@
+reference,type,title,replacementValue,location,suitableForChildren
+ITEMABC2,Book,Java For Dummies,40.0,101.1,true
+ITEMABC1,DVD,Scary Movie,25.0,101.2,false

@@ -1,0 +1,6 @@
+memberId,firstName,lastName,isChild,guardianId
+1,Miguel,Flores,false,0
+2,John,Doe,false,0
+3,Lily,Doe,true,2
+4,Bob,Sawyer,false,0
+5,Steve,Jobs,false,0

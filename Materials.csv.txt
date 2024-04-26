@@ -1,0 +1,3 @@
+type,title,replacementValue,location,suitableForChildren
+Book,Java For Dummies,40.00,101.1,true
+DVD,Scary Movie,25.00,102.2,false
